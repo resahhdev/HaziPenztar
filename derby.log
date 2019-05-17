@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Thu May 16 23:32:42 CEST 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-016a-c28f-c1a1-000005c9b838 
+on database directory /home/resahh/Develop/2019/HaziPenztar/homecassaDb with class loader sun.misc.Launcher$AppClassLoader@33909752 
+Loaded from file:/home/resahh/Develop/2019/HaziPenztar/dist/run2001898711/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_201-b09
+user.dir=/home/resahh/Develop/2019/HaziPenztar
+os.name=Linux
+os.arch=amd64
+os.version=4.9.0-8-amd64
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

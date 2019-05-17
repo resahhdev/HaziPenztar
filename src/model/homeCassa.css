@@ -1,0 +1,17 @@
+#diagramPane {
+    -fx-background-color: blue;
+}
+
+#loginPane {
+    
+}
+
+#passTf {
+    -fx-background-color: #f4f4f4;
+    -fx-text-inner-color: black;
+}
+
+#userNameTf {
+    -fx-background-color: #f4f4f4;
+    -fx-text-inner-color: black;
+}
