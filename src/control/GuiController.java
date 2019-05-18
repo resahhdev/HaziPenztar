@@ -41,6 +41,9 @@ import javafx.scene.paint.Color;
 public class GuiController implements Initializable {
     
     private DatabaseController dbCtr;
+    @FXML private DatePicker datePicker;
+    
+//===================== Start menu items declaration ===========================
     @FXML private final String MANAGE_MN = "Kezelés";
     @FXML private final String LOGIN_MN = "Bejelentkezés";
     @FXML private final String CLOSE_MN = "Kilépés";
@@ -54,6 +57,9 @@ public class GuiController implements Initializable {
     @FXML private final String PROGRAM_MN = "Program";
     @FXML private final String ABOUT_MN = "Programról";
     @FXML private final String HELEP_MN = "Segítség";
+//======================= End menu items declaration ===========================
+    
+//======================== Start panes declaration =============================
     @FXML private StackPane menuPane;
     @FXML private StackPane helpPane;
     @FXML private StackPane aboutPane;
@@ -61,22 +67,45 @@ public class GuiController implements Initializable {
     @FXML private StackPane diagramPane;
     @FXML private StackPane loginPane;
     @FXML private StackPane dataPane;
+    @FXML private StackPane userPane;
+    @FXML private StackPane categoryPane;
+//========================= End panes declaration ==============================
+    
+//===================== Start textfields declaration ===========================
     @FXML private TableView table;
     @FXML private TreeView treeView;
     @FXML private TextField userNameTf;
     @FXML private PasswordField passTf;
     @FXML private TextField noteTf;
     @FXML private TextField valueTf;
+    @FXML private TextField addUserTf;
+    @FXML private TextField addPassTf;
+    @FXML private TextField categoryTf;
+//======================== End textfields declaration ==========================
+    
+//========================== Start buttons declaration =========================
     @FXML private Button loginBtn;
-    @FXML private Button saveBtn;
+    @FXML private Button dataSaveBtn;
     @FXML private Button dbBtn;
+    @FXML private Button delUserBtn;
+    @FXML private Button addUserBtn;
+    @FXML private Button addCategoryBtn;
+    @FXML private Button delCategoryBtn;
+//=========================== End buttons declarations =========================
+    
+//=========================== Start labels declaration =========================
     @FXML private Label statusLbl;
     @FXML private Label loginStatusLbl;
     @FXML private Label dataStatusLbl;
     @FXML private Label ballanceLbl;
-    @FXML private DatePicker datePicker;
-    @FXML private ComboBox categoryCb;
-    @FXML private ComboBox directionCb;
+    @FXML private Label addUserLbl;
+    @FXML private Label categoryStatusLbl;
+//============================ End labels declaration ==========================
+    
+//========================= Start checkboxes declaration =======================
+    @FXML private ComboBox dataCategoryCb;
+    @FXML private ComboBox dataDirectionCb;
+//========================== End checkboxes declaration ========================
     private int mode;
     
     private final ObservableList<Wallet> xData =
@@ -104,12 +133,18 @@ public class GuiController implements Initializable {
         dbCtr = new DatabaseController( this );
         loginStatusLbl.setText( "" );
         statusLbl.setText( "" );
+        dataStatusLbl.setText( "" );
+        addUserLbl.setText( "" );
         loginStatusLbl.setText( "" );
+        categoryStatusLbl.setText( "" );
         loginPane.setVisible( false );
         tablePane.setVisible( false );
         diagramPane.setVisible( false );
         aboutPane.setVisible( false );
         helpPane.setVisible( false );
+        userPane.setVisible( false );
+        categoryPane.setVisible( false );
+        dataPane.setVisible( false );
     }
     
     private void setStatusPane() {
@@ -202,17 +237,17 @@ public class GuiController implements Initializable {
                         case CLOSE_MN: exit(); break;
                         case DATA_MN:
                             if( mode == 2 ) {
-                               inputData(); 
+                               setDataPane(); 
                             }
                             break;
                         case USER_MN:
                             if( mode == 2 ) {
-                               addUser(); 
+                               setUserPane(); 
                             }
                             break;
                         case CATEGORY_MN:
                             if( mode == 2 ) {
-                               addCategory(); 
+                               setCategoryPane(); 
                             }
                             break;
                         case TABLE_MN:
@@ -227,12 +262,12 @@ public class GuiController implements Initializable {
                             break;
                         case ABOUT_MN:
                             if( mode == 2 ) {
-                               showAbout(); 
+                               setAboutPane(); 
                             }
                             break;
                         case HELEP_MN:
                             if( mode == 2 ) {
-                               showHelp(); 
+                               setHelpPane(); 
                             }
                             break;
                     }
@@ -246,6 +281,11 @@ public class GuiController implements Initializable {
         loginPane.setVisible( false );
         tablePane.setVisible( true );
         diagramPane.setVisible( false );
+        dataPane.setVisible( false );
+        categoryPane.setVisible( false );
+        userPane.setVisible( false );
+        aboutPane.setVisible( false );
+        helpPane.setVisible( false );
         setTable();
     }
     
@@ -286,11 +326,11 @@ public class GuiController implements Initializable {
         loginPane.setVisible( false );
         tablePane.setVisible( false );
         diagramPane.setVisible( true );
-        
-        if( mode == 2 ) {
-            
-            setDiagram();
-        }
+        dataPane.setVisible( false );
+        categoryPane.setVisible( false );
+        userPane.setVisible( false );
+        aboutPane.setVisible( false );
+        helpPane.setVisible( false );
     }
     
     public void setDiagram() {
@@ -302,6 +342,69 @@ public class GuiController implements Initializable {
         loginPane.setVisible( true );
         tablePane.setVisible( false );
         diagramPane.setVisible( false );
+        dataPane.setVisible( false );
+        categoryPane.setVisible( false );
+        userPane.setVisible( false );
+        aboutPane.setVisible( false );
+        helpPane.setVisible( false );
+    }
+    
+    private void setAboutPane() {
+        
+        loginPane.setVisible( false );
+        tablePane.setVisible( false );
+        diagramPane.setVisible( false );
+        dataPane.setVisible( false );
+        categoryPane.setVisible( false );
+        userPane.setVisible( false );
+        aboutPane.setVisible( true );
+        helpPane.setVisible( false );
+    }
+    
+    private void setHelpPane() {
+        
+        loginPane.setVisible( false );
+        tablePane.setVisible( false );
+        diagramPane.setVisible( false );
+        dataPane.setVisible( false );
+        categoryPane.setVisible( false );
+        userPane.setVisible( false );
+        aboutPane.setVisible( false );
+        helpPane.setVisible( true );
+    }
+    
+    private void setUserPane() {
+        
+        loginPane.setVisible( false );
+        tablePane.setVisible( false );
+        diagramPane.setVisible( false );
+        dataPane.setVisible( false );
+        categoryPane.setVisible( false );
+        userPane.setVisible( true );
+        aboutPane.setVisible( false );
+        helpPane.setVisible( false );
+    }
+    
+    private void setCategoryPane() {
+        
+        loginPane.setVisible( false );
+        tablePane.setVisible( false );
+        diagramPane.setVisible( false );
+        dataPane.setVisible( false );
+        categoryPane.setVisible( true );
+        userPane.setVisible( false );
+        aboutPane.setVisible( false );
+        helpPane.setVisible( false );
+    }
+    
+    private void setDataPane() {
+        
+        loginPane.setVisible( false );
+        tablePane.setVisible( false );
+        diagramPane.setVisible( false );
+        dataPane.setVisible( true );
+        categoryPane.setVisible( false );
+        userPane.setVisible( false );
         aboutPane.setVisible( false );
         helpPane.setVisible( false );
     }
@@ -376,15 +479,7 @@ public class GuiController implements Initializable {
         
     }
     
-    private void showAbout() {
-        
-    }
-    
-    private void showHelp() {
-        
-    }
-    
-    public void setDbConnectionErrorMessage( String AMessage ) {
+    public void setErrorMessage( String AMessage ) {
         
         statusLbl.setText( AMessage );
     }

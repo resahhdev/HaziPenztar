@@ -84,7 +84,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <StackPane id="dataPane" fx:id="dataPane" prefHeight="598.0" prefWidth="520.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <StackPane id="dataPane" fx:id="dataPane" prefHeight="598.0" prefWidth="520.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
@@ -109,7 +109,7 @@
                                        <FlowPane.margin>
                                           <Insets left="20.0" />
                                        </FlowPane.margin></Label>
-                                    <ComboBox id="categoryCb" fx:id="categoryCb" prefWidth="220.0">
+                                    <ComboBox id="dataCategoryCb" fx:id="dataCategoryCb" prefWidth="220.0">
                                        <FlowPane.margin>
                                           <Insets left="15.0" />
                                        </FlowPane.margin>
@@ -150,7 +150,7 @@
                                           <Insets left="45.0" />
                                        </FlowPane.margin>
                                     </Label>
-                                    <ComboBox id="directionCb" fx:id="directionCb" prefWidth="220.0">
+                                    <ComboBox id="dataDirectionCb" fx:id="dataDirectionCb" prefWidth="220.0">
                                        <FlowPane.margin>
                                           <Insets left="20.0" />
                                        </FlowPane.margin>
@@ -159,7 +159,7 @@
                               </FlowPane>
                               <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Button id="saveBtn" fx:id="saveBtn" mnemonicParsing="false" text="Kiírás">
+                                    <Button id="dataSaveBtn" fx:id="dataSaveBtn" mnemonicParsing="false" text="OK">
                                        <FlowPane.margin>
                                           <Insets right="40.0" />
                                        </FlowPane.margin>
@@ -268,6 +268,118 @@
                   </StackPane>
                   <StackPane id="aboutPane" fx:id="aboutPane" prefHeight="598.0" prefWidth="520.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <StackPane id="helpPane" fx:id="helpPane" prefHeight="598.0" prefWidth="520.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <StackPane id="userPane" fx:id="userPane" prefHeight="598.0" prefWidth="520.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Felhasználó kezelés">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Felhasználónév:" />
+                                    <TextField id="addUserTf" fx:id="addUserTf" prefWidth="220.0">
+                                       <FlowPane.margin>
+                                          <Insets left="10.0" />
+                                       </FlowPane.margin>
+                                    </TextField>
+                                 </children>
+                              </FlowPane>
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Jelszó:">
+                                       <FlowPane.margin>
+                                          <Insets left="65.0" />
+                                       </FlowPane.margin>
+                                    </Label>
+                                    <PasswordField id="addPassTf" fx:id="addPassTf" prefWidth="220.0">
+                                       <FlowPane.margin>
+                                          <Insets left="10.0" />
+                                       </FlowPane.margin>
+                                    </PasswordField>
+                                 </children>
+                              </FlowPane>
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Button id="delUserBtn" fx:id="delUserBtn" mnemonicParsing="false" prefWidth="100.0" text="Törlés">
+                                       <FlowPane.margin>
+                                          <Insets right="10.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                    <Button id="addUserBtn" fx:id="addUserBtn" mnemonicParsing="false" prefWidth="100.0" text="Hozzáadás">
+                                       <FlowPane.margin>
+                                          <Insets left="10.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label id="addUserLbl" fx:id="addUserLbl" text="Label" />
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </StackPane>
+                  <StackPane id="categoryPane" fx:id="categoryPane" prefHeight="598.0" prefWidth="520.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label alignment="CENTER" text="Kategória kezelés">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Kategória:" />
+                                    <TextField id="categoryTf" fx:id="categoryTf" prefWidth="220.0">
+                                       <FlowPane.margin>
+                                          <Insets left="10.0" />
+                                       </FlowPane.margin>
+                                    </TextField>
+                                 </children>
+                              </FlowPane>
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Button id="delCategoryBtn" fx:id="delCategoryBtn" mnemonicParsing="false" prefWidth="100.0" text="Törlés" />
+                                    <Button id="addCategoryBtn" fx:id="addCategoryBtn" mnemonicParsing="false" prefWidth="100.0" text="Hozzáadás">
+                                       <FlowPane.margin>
+                                          <Insets left="10.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                 </children>
+                              </FlowPane>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label id="categoryStatusLbl" fx:id="categoryStatusLbl" text="Label" />
+                                 </children></FlowPane>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </StackPane>
                </children>
             </AnchorPane>
         </items>
