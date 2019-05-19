@@ -51,4 +51,9 @@ public class SqlQueries {
         String sql = "select username, password from USERS where username = '" + AText + "'";
         return sql;
     }
+    
+    public String getComboItemsSql() {
+        String sql = "select category from categories";
+        return sql;
+    }
 }

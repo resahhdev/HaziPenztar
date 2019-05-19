@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import static javafx.collections.FXCollections.observableArrayList;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -29,9 +32,11 @@ public class DatabaseController {
     private ResultSet resultset;
     private PreparedStatement prepStm;
     private Statement createStatement;
+    private ObservableList<String> categoryList;
     
     public DatabaseController( GuiController AGuiCtr ) {
         
+        categoryList = FXCollections.observableArrayList();
         guiCtr = AGuiCtr;
         conn = null;
         sqlQueries = new SqlQueries();
@@ -79,5 +84,30 @@ public class DatabaseController {
             
         }
         return authentication;
+    }
+    
+    public void setCategoryList() {
+        
+        String sql = sqlQueries.getComboItemsSql();
+        conn = dbConn.connect();
+        createStatement = null;
+        resultset = null;
+        
+        try {
+            
+            createStatement = conn.createStatement();
+            resultset = createStatement.executeQuery( sql );
+            while( resultset.next() ) {
+                
+                categoryList.add( resultset.getString( "category" ));
+            }
+            
+        }catch( SQLException AEx ) {
+            Logger.getLogger( DatabaseController.class.getName()).log(Level.SEVERE, null, AEx );
+        }
+    }
+    
+    public ObservableList getCategoryList() {
+        return categoryList;
     }
 }

@@ -103,8 +103,10 @@ public class GuiController implements Initializable {
 //============================ End labels declaration ==========================
     
 //========================= Start checkboxes declaration =======================
-    @FXML private ComboBox dataCategoryCb;
-    @FXML private ComboBox dataDirectionCb;
+    @FXML private ComboBox<String> dataCategoryCb;
+    @FXML private ComboBox<String> dataDirectionCb;
+    private ObservableList<String> categoryList;
+    private ObservableList<String> directionList;
 //========================== End checkboxes declaration ========================
     private int mode;
     
@@ -121,6 +123,7 @@ public class GuiController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        directionList = FXCollections.observableArrayList( "Ki", "Be" );
         setStatusPane();
         start();
         menuAction();
@@ -407,6 +410,11 @@ public class GuiController implements Initializable {
         userPane.setVisible( false );
         aboutPane.setVisible( false );
         helpPane.setVisible( false );
+        
+        dbCtr.setCategoryList();
+        categoryList = dbCtr.getCategoryList();
+        dataCategoryCb.setItems( categoryList );
+        dataDirectionCb.setItems( directionList );
     }
     
     public void dbBtnAction() {
@@ -467,15 +475,23 @@ public class GuiController implements Initializable {
         System.exit( 0 );
     }
     
-    private void inputData() {
+    private void inputDataBtnAction() {
         
     }
     
-    private void addUser() {
+    private void addUserBtnAction() {
         
     }
     
-    private void addCategory() {
+    private void delUserBtnAction() {
+        
+    }
+    
+    private void addCategoryBtnAction() {
+        
+    }
+    
+    private void delCategoryBtnAction() {
         
     }
     
