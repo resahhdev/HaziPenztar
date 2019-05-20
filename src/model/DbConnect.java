@@ -47,14 +47,17 @@ public class DbConnect {
                 resultset = dbMeta.getTables( null, "APP", "WALLET", null );
                 if( !resultset.next() ) {
                     
-                    
                     String walletSql = sqlQeries.getCreateWalletSql();
                     creatStatement.execute( walletSql );
-                    String userSql = sqlQeries.getCreateUsersSql();
-                    creatStatement.execute( userSql );
                     String categorySql = sqlQeries.getCreateCategoriesSql();
                     creatStatement.execute( categorySql );
-                    String insertUserSql = sqlQeries.getIsertUserSql();
+                    String directionSql = sqlQeries.getCreateDirectionSql();
+                    creatStatement.execute( directionSql );
+                    String userSql = sqlQeries.getCreateUsersSql();
+                    creatStatement.execute( userSql );
+                    String insertDirectionSql = sqlQeries.getInsertDirectionSql();
+                    creatStatement.execute( insertDirectionSql );
+                    String insertUserSql = sqlQeries.getInsertUserSql();
                     creatStatement.execute( insertUserSql );
                     String insertCategoriesSql = sqlQeries.getInsertCategoriesSql();
                     creatStatement.execute( insertCategoriesSql );

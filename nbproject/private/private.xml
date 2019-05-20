@@ -5,7 +5,10 @@
         <group>
             <file>file:/home/resahh/Develop/2019/HaziPenztar/src/control/GuiController.java</file>
             <file>file:/home/resahh/Develop/2019/HaziPenztar/src/model/DbConnect.java</file>
+            <file>file:/home/resahh/Develop/2019/HaziPenztar/src/model/Wallet.java</file>
             <file>file:/home/resahh/Develop/2019/HaziPenztar/src/view/Gui.fxml</file>
+            <file>file:/home/resahh/Develop/2019/HaziPenztar/src/model/SqlQueries.java</file>
+            <file>file:/home/resahh/Develop/2019/HaziPenztar/src/hazipenztar/HaziPenztar.java</file>
             <file>file:/home/resahh/Develop/2019/HaziPenztar/src/control/DatabaseController.java</file>
         </group>
     </open-files>
