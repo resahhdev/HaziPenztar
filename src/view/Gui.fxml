@@ -160,7 +160,7 @@
                               </FlowPane>
                               <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Button id="dataSaveBtn" fx:id="dataSaveBtn" mnemonicParsing="false" text="OK">
+                                    <Button id="dataSaveBtn" fx:id="dataSaveBtn" onAction="#inputDataBtnAction" mnemonicParsing="false" text="OK">
                                        <FlowPane.margin>
                                           <Insets right="40.0" />
                                        </FlowPane.margin>

@@ -69,3 +69,15 @@ public class Wallet {
         image = AImage;
     }
 }
+
+
+            /*
+            FXCollections.observableArrayList(
+            
+            new Wallet( "2019-01-28", "Háztartás", "2000", "Csap", new ImageView( red )),
+            new Wallet( "2019-02-05", "Fizetés", "200000", "Cég", new ImageView( green )),
+            new Wallet( "2019-02-21", "Autó", "32000", "Kuplung", new ImageView( red )),
+            new Wallet( "2019-03-02", "Élelmiszer", "5000", "Hús", new ImageView( red )),
+            new Wallet( "2019-03-28", "Háztartás", "8000", "Lábos", new ImageView( red ))
+            );
+            */

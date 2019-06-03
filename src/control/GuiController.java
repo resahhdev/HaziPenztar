@@ -112,18 +112,8 @@ public class GuiController implements Initializable {
     private int mode;
     private Image green = new Image( getClass().getResourceAsStream( "/images/greenlamp.png" ));
     private Image red = new Image( getClass().getResourceAsStream( "/images/redlamp.png" ));
-    
     private ObservableList<Wallet> xData = FXCollections.observableArrayList();
-            /*
-            FXCollections.observableArrayList(
             
-            new Wallet( "2019-01-28", "Háztartás", "2000", "Csap", new ImageView( red )),
-            new Wallet( "2019-02-05", "Fizetés", "200000", "Cég", new ImageView( green )),
-            new Wallet( "2019-02-21", "Autó", "32000", "Kuplung", new ImageView( red )),
-            new Wallet( "2019-03-02", "Élelmiszer", "5000", "Hús", new ImageView( red )),
-            new Wallet( "2019-03-28", "Háztartás", "8000", "Lábos", new ImageView( red ))
-            );
-            */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
@@ -295,6 +285,7 @@ public class GuiController implements Initializable {
         helpPane.setVisible( false );
         
         if( xData.isEmpty() ) {
+            
             setTable();
         }
     }
@@ -303,32 +294,22 @@ public class GuiController implements Initializable {
         
         TableColumn xDateCol = new TableColumn( "Dátum" );
         xDateCol.setMinWidth( 25 );
-        //xDateCol.setCellFactory( TextFieldTableCell.forTableColumn() );
         xDateCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "date" ));
       
         TableColumn xCategoryCol = new TableColumn( "Kategória" );
         xCategoryCol.setMinWidth( 100 );
-        //xCategoryCol.setCellFactory( TextFieldTableCell.forTableColumn() );
         xCategoryCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "category" ));
         
         TableColumn xPriceCol = new TableColumn( "Összeg" );
         xPriceCol.setMinWidth( 15 );
-        //xPriceCol.setCellFactory( TextFieldTableCell.forTableColumn() );
         xPriceCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "price" ));
         
         TableColumn xCommentCol = new TableColumn( "Megjegyzés" );
         xCommentCol.setMinWidth( 200 );
-        //xCommentCol.setCellFactory( TextFieldTableCell.forTableColumn() );
         xCommentCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "comment" ));
-        /*
-        TableColumn xImageCol = new TableColumn( "Irány" );
-        xImageCol.setMinWidth( 10 );
-        xImageCol.setCellFactory( TextFieldTableCell.forTableColumn() );
-        xImageCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "direction" ));
-        */
+        
         TableColumn xImageCol = new TableColumn( "Irány" );
         xImageCol.setMinWidth( 20 );
-        //xDirectionCol.setCellFactory( TextFieldTableCell.forTableColumn() );
         xImageCol.setCellValueFactory( new PropertyValueFactory<>( "image" ));
         
         table.getColumns().addAll( xDateCol, xCategoryCol, xPriceCol, xCommentCol, xImageCol );
@@ -499,21 +480,33 @@ public class GuiController implements Initializable {
         valueTf.setText( "" );
         noteTf.setText( "" );
         dataStatusLbl.setText( "Sikeres felírás" );
-    }
-    
-    private void addUserBtnAction() {
+        ImageView imageView;
+        if( direction.equals( "Ki" )) {
+            
+            imageView = new ImageView( red );
+            
+        }else {
+            
+            imageView = new ImageView( green );
+        }
+        Wallet wallet = new Wallet( date, category, price, comment, imageView );
+        table.getItems().add(wallet);
         
     }
     
-    private void delUserBtnAction() {
+    public void addUserBtnAction() {
         
     }
     
-    private void addCategoryBtnAction() {
+    public void delUserBtnAction() {
         
     }
     
-    private void delCategoryBtnAction() {
+    public void addCategoryBtnAction() {
+        
+    }
+    
+    public void delCategoryBtnAction() {
         
     }
     
