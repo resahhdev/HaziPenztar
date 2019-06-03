@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class DbConnect {
 
-    private final String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+    //private final String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
     private final String URL = "jdbc:derby:homecassaDb;create=true";
     private Connection conn;
     private SqlQueries sqlQeries;
