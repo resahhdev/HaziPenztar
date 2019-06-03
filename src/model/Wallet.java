@@ -6,6 +6,7 @@
 package model;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -18,14 +19,16 @@ public class Wallet {
     private SimpleStringProperty price;
     private SimpleStringProperty comment;
     private SimpleStringProperty direction;
+    private ImageView image;
 
-    public Wallet( String ADate, String ACategory, String APrice, String AComment, String ADirection ) {
+    public Wallet( String ADate, String ACategory, String APrice, String AComment, ImageView AImage ) {
         
         date = new SimpleStringProperty( ADate );
         category = new SimpleStringProperty( ACategory );
         price = new SimpleStringProperty( APrice );
         comment = new SimpleStringProperty( AComment );
-        direction = new SimpleStringProperty( ADirection );
+        //direction = new SimpleStringProperty( ADirection );
+        image = AImage;
     }
     
     public String getDate() {
@@ -57,5 +60,12 @@ public class Wallet {
     }
     public void setDirection( String ADirection ) {
         direction.set( ADirection );
+    }
+    
+    public ImageView getImage() {
+        return image;
+    }
+    public void setImage( ImageView AImage ) {
+        image = AImage;
     }
 }
