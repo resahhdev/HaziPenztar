@@ -40,7 +40,7 @@ public class SqlQueries {
     }
     
     public String getInsertDirectionSql() {
-        String sql = "insert into directions( id, direction ) values ( 1, 'be'), ( 2, 'ki' )";
+        String sql = "insert into directions( id, direction ) values ( 1, 'Be'), ( 2, 'Ki' )";
         return sql;
     }
     
@@ -64,6 +64,20 @@ public class SqlQueries {
     
     public String getComboItemsSql() {
         String sql = "select category from categories";
+        return sql;
+    }
+    
+    public String getWalletDataSql() {
+        String walletSql = "SELECT date, category, price, comment, direction FROM wallet " +
+                           "INNER JOIN categories ON categoryId = categories.id " +
+                           "INNER JOIN directions ON directionId = directions.id";
+        return walletSql;
+    }
+    
+    public String getInsertDataSql( String ADate, String ACat, String APrice, String AComm, String ADir ) {
+        String sql = "INSERT INTO wallet (date, categoryId, price, comment, directionId) VALUES " +
+                     "( '" + ADate + "', (SELECT id FROM categories WHERE category = '" + ACat + "'), '" + APrice +  "', " +
+                     "'" + AComm + "', (SELECT id FROM directions WHERE direction = '" + ADir + "'))";
         return sql;
     }
 }
