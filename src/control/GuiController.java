@@ -14,6 +14,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -109,17 +110,20 @@ public class GuiController implements Initializable {
     private ObservableList<String> directionList;
 //========================== End checkboxes declaration ========================
     private int mode;
+    private Image green = new Image( getClass().getResourceAsStream( "/images/greenlamp.png" ));
+    private Image red = new Image( getClass().getResourceAsStream( "/images/redlamp.png" ));
     
-    private final ObservableList<Wallet> xData =
+    private ObservableList<Wallet> xData = FXCollections.observableArrayList();
+            /*
             FXCollections.observableArrayList(
             
-            new Wallet( "2019-01-28", "Háztartás", "2000", "Csap", "ki" ),
-            new Wallet( "2019-02-05", "Fizetés", "200000", "Cég", "be" ),
-            new Wallet( "2019-02-21", "Autó", "32000", "Kuplung", "ki" ),
-            new Wallet( "2019-03-02", "Élelmiszer", "5000", "Hús", "ki" ),
-            new Wallet( "2019-03-28", "Háztartás", "8000", "Lábos", "ki" )
+            new Wallet( "2019-01-28", "Háztartás", "2000", "Csap", new ImageView( red )),
+            new Wallet( "2019-02-05", "Fizetés", "200000", "Cég", new ImageView( green )),
+            new Wallet( "2019-02-21", "Autó", "32000", "Kuplung", new ImageView( red )),
+            new Wallet( "2019-03-02", "Élelmiszer", "5000", "Hús", new ImageView( red )),
+            new Wallet( "2019-03-28", "Háztartás", "8000", "Lábos", new ImageView( red ))
             );
-    
+            */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
@@ -289,39 +293,47 @@ public class GuiController implements Initializable {
         userPane.setVisible( false );
         aboutPane.setVisible( false );
         helpPane.setVisible( false );
-        setTable();
+        
+        if( xData.isEmpty() ) {
+            setTable();
+        }
     }
     
     public void setTable() {
         
         TableColumn xDateCol = new TableColumn( "Dátum" );
         xDateCol.setMinWidth( 25 );
-        xDateCol.setCellFactory( TextFieldTableCell.forTableColumn() );
+        //xDateCol.setCellFactory( TextFieldTableCell.forTableColumn() );
         xDateCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "date" ));
       
         TableColumn xCategoryCol = new TableColumn( "Kategória" );
         xCategoryCol.setMinWidth( 100 );
-        xCategoryCol.setCellFactory( TextFieldTableCell.forTableColumn() );
+        //xCategoryCol.setCellFactory( TextFieldTableCell.forTableColumn() );
         xCategoryCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "category" ));
         
         TableColumn xPriceCol = new TableColumn( "Összeg" );
         xPriceCol.setMinWidth( 15 );
-        xPriceCol.setCellFactory( TextFieldTableCell.forTableColumn() );
-        xPriceCol.setCellValueFactory( new PropertyValueFactory<Wallet, Integer>( "price" ));
+        //xPriceCol.setCellFactory( TextFieldTableCell.forTableColumn() );
+        xPriceCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "price" ));
         
         TableColumn xCommentCol = new TableColumn( "Megjegyzés" );
         xCommentCol.setMinWidth( 200 );
-        xCommentCol.setCellFactory( TextFieldTableCell.forTableColumn() );
+        //xCommentCol.setCellFactory( TextFieldTableCell.forTableColumn() );
         xCommentCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "comment" ));
+        /*
+        TableColumn xImageCol = new TableColumn( "Irány" );
+        xImageCol.setMinWidth( 10 );
+        xImageCol.setCellFactory( TextFieldTableCell.forTableColumn() );
+        xImageCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "direction" ));
+        */
+        TableColumn xImageCol = new TableColumn( "Irány" );
+        xImageCol.setMinWidth( 20 );
+        //xDirectionCol.setCellFactory( TextFieldTableCell.forTableColumn() );
+        xImageCol.setCellValueFactory( new PropertyValueFactory<>( "image" ));
         
-        TableColumn xDirectionCol = new TableColumn( "Irány" );
-        xDirectionCol.setMinWidth( 10 );
-        xDirectionCol.setCellFactory( TextFieldTableCell.forTableColumn() );
-        xDirectionCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "direction" ));
-        
-        table.getColumns().addAll( xDateCol, xCategoryCol, xPriceCol, xCommentCol, xDirectionCol );
+        table.getColumns().addAll( xDateCol, xCategoryCol, xPriceCol, xCommentCol, xImageCol );
+        xData.addAll( dbCtr.setWalletData() );
         table.setItems( xData );
-        
     }
     
     private void setDiagramPane() {
@@ -475,8 +487,18 @@ public class GuiController implements Initializable {
         System.exit( 0 );
     }
     
-    private void inputDataBtnAction() {
+    public void inputDataBtnAction() {
         
+        String date = String.valueOf( datePicker.getValue() );
+        String category = dataCategoryCb.getSelectionModel().getSelectedItem();
+        String price = valueTf.getText();
+        String comment = noteTf.getText();
+        String direction = dataDirectionCb.getSelectionModel().getSelectedItem();
+        dbCtr.insertData( date, category, price, comment, direction );
+        
+        valueTf.setText( "" );
+        noteTf.setText( "" );
+        dataStatusLbl.setText( "Sikeres felírás" );
     }
     
     private void addUserBtnAction() {
