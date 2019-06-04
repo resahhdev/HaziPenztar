@@ -321,6 +321,25 @@ public class GuiController implements Initializable {
         table.getColumns().addAll( xDateCol, xCategoryCol, xPriceCol, xCommentCol, xImageCol );
         xData.addAll( dbCtr.setWalletData() );
         table.setItems( xData );
+        setBallaceLbl();
+    }
+    
+    public void setBallaceLbl() {
+        
+        int ballance = dbCtr.getBallance();
+        if( ballance >= 100000 ) {
+            
+            ballanceLbl.setTextFill( Color.web( "green" ));
+            
+        }else if( ballance < 100000 && ballance > 50000 ) {
+            
+            ballanceLbl.setTextFill( Color.web( "orange" ));
+            
+        }else {
+            
+            ballanceLbl.setTextFill( Color.web( "red" ));
+        }
+        ballanceLbl.setText( String.valueOf( ballance ));
     }
     
     private void setDiagramPane() {
@@ -501,7 +520,7 @@ public class GuiController implements Initializable {
         }
         Wallet wallet = new Wallet( date, category, price, comment, imageView );
         table.getItems().add(wallet);
-        
+        setBallaceLbl();
     }
     
     public void addUserBtnAction() {

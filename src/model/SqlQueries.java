@@ -98,4 +98,18 @@ public class SqlQueries {
                      "'" + AComm + "', (SELECT id FROM directions WHERE direction = '" + ADir + "'))";
         return insertDataSql;
     }
+    
+    public String getIncomeSql() {
+        String selectPriceSql = "SELECT price FROM wallet " +
+                                "INNER JOIN directions ON directionId = directions.id " +
+                                "WHERE direction = 'Be'";
+        return selectPriceSql;
+    }
+    
+    public String getOutGoingSql() {
+        String selectPriceSql = "SELECT price FROM wallet " +
+                                "INNER JOIN directions ON directionId = directions.id " +
+                                "WHERE direction = 'Ki'";
+        return selectPriceSql;
+    }
 }

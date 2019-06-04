@@ -156,8 +156,6 @@ public class DatabaseController {
     
     public ArrayList<Wallet> setWalletData() {
         
-        //Image green = new Image( getClass().getResourceAsStream( "/images/greenlamp.png" ));
-        //Image red = new Image( getClass().getResourceAsStream( "/images/redlamp.png" ));
         Image image = null;
         String sql = sqlQueries.getWalletDataSql();
         conn = null;
@@ -196,6 +194,42 @@ public class DatabaseController {
             ex.printStackTrace();
         }
         return walletData;
+    }
+    
+    public int getBallance() {
+        
+        conn = null;
+        createStatement = null;
+        resultset = null;
+        String incomeSql = sqlQueries.getIncomeSql();
+        String outGoingSql = sqlQueries.getOutGoingSql();
+        int income = 0;
+        int outGoing = 0;
+        
+        try {
+            
+            conn = dbConn.connect();
+            createStatement = conn.createStatement();
+            resultset = createStatement.executeQuery( incomeSql );
+            while( resultset.next() ) {
+                
+                int in = Integer.parseInt( resultset.getString( "price" ));
+                income += in;
+            }
+            
+            createStatement = conn.createStatement();
+            resultset = createStatement.executeQuery( outGoingSql );
+            while ( resultset.next() ) {                
+                
+                int out = Integer.parseInt( resultset.getString( "price" ));
+                outGoing += out;
+            }
+            
+        } catch ( SQLException ex ) {
+            ex.printStackTrace();
+        }
+        int ballance = income - outGoing;
+        return ballance;
     }
     
     public void insertData( String ADate, String ACategory, String APrice, String AComment, String ADirection ) {
