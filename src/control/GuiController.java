@@ -9,6 +9,7 @@ import control.DatabaseController;
 import model.Wallet;
 import java.net.URL;
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -75,8 +76,8 @@ public class GuiController implements Initializable {
 //===================== Start textfields declaration ===========================
     @FXML private TableView table;
     @FXML private TreeView treeView;
-    @FXML private TextField userNameTf;
-    @FXML private PasswordField passTf;
+    @FXML private TextField loginUserNameTf;
+    @FXML private PasswordField loginPassTf;
     @FXML private TextField noteTf;
     @FXML private TextField valueTf;
     @FXML private TextField addUserTf;
@@ -103,12 +104,13 @@ public class GuiController implements Initializable {
     @FXML private Label categoryStatusLbl;
 //============================ End labels declaration ==========================
     
-//========================= Start checkboxes declaration =======================
+//========================= Start comboboxes declaration =======================
     @FXML private ComboBox<String> dataCategoryCb;
     @FXML private ComboBox<String> dataDirectionCb;
+    @FXML private ComboBox<String> selectDataCb;
     private ObservableList<String> categoryList;
     private ObservableList<String> directionList;
-//========================== End checkboxes declaration ========================
+//========================== End comboboxes declaration ========================
     private int mode;
     private Image green = new Image( getClass().getResourceAsStream( "/images/greenlamp.png" ));
     private Image red = new Image( getClass().getResourceAsStream( "/images/redlamp.png" ));
@@ -292,6 +294,10 @@ public class GuiController implements Initializable {
     
     public void setTable() {
         
+        dbCtr.setCategoryList();
+        categoryList = dbCtr.getCategoryList();
+        selectDataCb.setItems( categoryList );
+        
         TableColumn xDateCol = new TableColumn( "Dátum" );
         xDateCol.setMinWidth( 25 );
         xDateCol.setCellValueFactory( new PropertyValueFactory<Wallet, String>( "date" ));
@@ -408,6 +414,7 @@ public class GuiController implements Initializable {
         categoryList = dbCtr.getCategoryList();
         dataCategoryCb.setItems( categoryList );
         dataDirectionCb.setItems( directionList );
+        datePicker.setValue( LocalDate.now() );
     }
     
     public void dbBtnAction() {
@@ -436,15 +443,15 @@ public class GuiController implements Initializable {
         
         if( mode == 1 ) {
             
-            if( !userNameTf.getText().equals( "" )) {
+            if( !loginUserNameTf.getText().equals( "" )) {
             
-                String authentication = dbCtr.getLoginUser( userNameTf.getText() );
+                String authentication = dbCtr.getLoginUser( loginUserNameTf.getText() );
                 String[] auth = authentication.split( ":" );
 
-                if( auth[ 0 ].equals( userNameTf.getText() ) && auth[ 1 ].equals( passTf.getText() )) {
+                if( auth[ 0 ].equals( loginUserNameTf.getText() ) && auth[ 1 ].equals( loginPassTf.getText() )) {
 
                     loginStatusLbl.setTextFill( Color.web( "green" ));
-                    loginStatusLbl.setText( "bejelentkezés OK" );
+                    statusLbl.setText( "Üdv " + auth[ 0]  );
                     mode = 2;
 
                 }else {
@@ -479,6 +486,9 @@ public class GuiController implements Initializable {
         
         valueTf.setText( "" );
         noteTf.setText( "" );
+        datePicker.getEditor().clear();
+        dataCategoryCb.getSelectionModel().clearSelection();
+        dataDirectionCb.getSelectionModel().clearSelection();
         dataStatusLbl.setText( "Sikeres felírás" );
         ImageView imageView;
         if( direction.equals( "Ki" )) {
@@ -496,9 +506,37 @@ public class GuiController implements Initializable {
     
     public void addUserBtnAction() {
         
+        String xUserName = addUserTf.getText();
+        String xPassword = addPassTf.getText();
+        boolean addUser = dbCtr.insertNewUser( xUserName, xPassword );
+        if( addUser ) {
+           
+            addUserLbl.setTextFill( Color.web( "green" ));
+            addUserLbl.setText( "Felhasználó hozzáadva" );
+        
+        }else {
+            
+            addUserLbl.setTextFill( Color.web( "red" ));
+            addUserLbl.setText( "Írási hiba" );
+        }
+        
     }
     
     public void delUserBtnAction() {
+        
+        String xUsername = addUserTf.getText();
+        boolean deleteUser = dbCtr.deleteUser( xUsername );
+        if( deleteUser ) {
+            
+            addUserLbl.setTextFill( Color.web( "green" ));
+            addUserLbl.setText( "Sikeres törlés" );
+            
+        }else {
+            
+            addUserLbl.setTextFill( Color.web( "red" ));
+            addUserLbl.setText( "Hiba a törlés során" );
+        }
+        
         
     }
     

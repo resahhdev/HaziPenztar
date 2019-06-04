@@ -57,7 +57,7 @@ public class DbConnect {
                     creatStatement.execute( userSql );
                     String insertDirectionSql = sqlQeries.getInsertDirectionSql();
                     creatStatement.execute( insertDirectionSql );
-                    String insertUserSql = sqlQeries.getInsertUserSql();
+                    String insertUserSql = sqlQeries.getInsertStartUserSql();
                     creatStatement.execute( insertUserSql );
                     String insertCategoriesSql = sqlQeries.getInsertCategoriesSql();
                     creatStatement.execute( insertCategoriesSql );

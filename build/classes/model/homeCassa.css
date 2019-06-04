@@ -6,12 +6,16 @@
     
 }
 
-#passTf {
+#loginPassTf {
     -fx-background-color: #f4f4f4;
     -fx-text-inner-color: black;
 }
 
-#userNameTf {
+#loginUserNameTf {
     -fx-background-color: #f4f4f4;
     -fx-text-inner-color: black;
+}
+
+#selectDataBtn {
+    
 }

@@ -71,7 +71,11 @@
                                           <FlowPane prefHeight="200.0" prefWidth="200.0" />
                                           <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                              <children>
-                                                <Label id="statusLbl" fx:id="statusLbl" alignment="CENTER" text="Label" textAlignment="CENTER" />
+                                                <Label id="statusLbl" fx:id="statusLbl" alignment="CENTER" text="Label" textAlignment="CENTER">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                </Label>
                                              </children>
                                           </FlowPane>
                                        </children>
@@ -160,7 +164,7 @@
                               </FlowPane>
                               <FlowPane alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Button id="dataSaveBtn" fx:id="dataSaveBtn" onAction="#inputDataBtnAction" mnemonicParsing="false" text="OK">
+                                    <Button id="dataSaveBtn" fx:id="dataSaveBtn" mnemonicParsing="false" onAction="#inputDataBtnAction" text="OK">
                                        <FlowPane.margin>
                                           <Insets right="40.0" />
                                        </FlowPane.margin>
@@ -177,9 +181,34 @@
                         </VBox>
                      </children></StackPane>
                   <StackPane id="diagramPane" fx:id="diagramPane" prefHeight="598.0" prefWidth="556.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <StackPane id="tablePane" fx:id="tablePane" layoutX="142.0" layoutY="155.0" prefHeight="598.0" prefWidth="556.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <StackPane id="tablePane" fx:id="tablePane" layoutX="142.0" layoutY="155.0" prefHeight="598.0" prefWidth="556.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TableView id="table" fx:id="table" prefHeight="200.0" prefWidth="200.0">
+                        <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Szűrés ">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <FlowPane.margin>
+                                    <Insets top="15.0" />
+                                 </FlowPane.margin>
+                                 <padding>
+                                    <Insets right="15.0" />
+                                 </padding>
+                              </Label>
+                              <ComboBox id="selectDataCb" fx:id="selectDataCb" prefWidth="150.0">
+                                 <FlowPane.margin>
+                                    <Insets top="15.0" />
+                                 </FlowPane.margin>
+                              </ComboBox>
+                              <Button id="selectDataBtn" fx:id="selectDataBtn" mnemonicParsing="false" text="OK">
+                                <FlowPane.margin>
+                                    <Insets top="15.0" />
+                                </FlowPane.margin>
+                              </Button>
+                           </children>
+                        </FlowPane>
+                        <TableView id="table" fx:id="table" maxHeight="500.0" prefHeight="300.0">
                           <placeholder>
                               <Label text="Nincs adat" />
                           </placeholder>
@@ -201,6 +230,9 @@
                                        </font>
                                     </Label>
                                  </children></FlowPane>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" visible="false" />
                               <FlowPane alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="200.0">
                                  <children>
                                     <Label text="Felhasználónév: " textFill="#171717">
@@ -208,7 +240,7 @@
                                           <Insets right="50.0" />
                                        </FlowPane.margin>
                                     </Label>
-                                    <TextField id="userNameTf" fx:id="userNameTf" prefWidth="220.0">
+                                    <TextField id="loginUserNameTf" fx:id="loginUserNameTf" prefWidth="220.0">
                                        <FlowPane.margin>
                                           <Insets right="50.0" />
                                        </FlowPane.margin>
@@ -231,7 +263,7 @@
                                           <Insets right="60.0" />
                                        </FlowPane.margin>
                                     </Label>
-                                    <PasswordField id="passTf" fx:id="passTf" prefWidth="220.0">
+                                    <PasswordField id="loginPassTf" fx:id="loginPassTf" prefWidth="220.0">
                                        <FlowPane.margin>
                                           <Insets right="50.0" />
                                        </FlowPane.margin>
@@ -254,6 +286,8 @@
                                           <Insets right="50.0" />
                                        </FlowPane.margin></Button>
                                  </children></FlowPane>
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane prefHeight="200.0" prefWidth="200.0" />
                               <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                  <children>
                                     <Label id="loginStatusLbl" fx:id="loginStatusLbl" text="Label">
@@ -310,12 +344,12 @@
                               </FlowPane>
                               <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Button id="delUserBtn" fx:id="delUserBtn" mnemonicParsing="false" prefWidth="100.0" text="Törlés">
+                                    <Button id="delUserBtn" fx:id="delUserBtn" mnemonicParsing="false" onAction="#delUserBtnAction" prefWidth="100.0" text="Törlés">
                                        <FlowPane.margin>
                                           <Insets right="10.0" />
                                        </FlowPane.margin>
                                     </Button>
-                                    <Button id="addUserBtn" fx:id="addUserBtn" mnemonicParsing="false" prefWidth="100.0" text="Hozzáadás">
+                                    <Button id="addUserBtn" fx:id="addUserBtn" mnemonicParsing="false" onAction="#addUserBtnAction" prefWidth="100.0" text="Hozzáadás">
                                        <FlowPane.margin>
                                           <Insets left="10.0" />
                                        </FlowPane.margin>
@@ -326,7 +360,11 @@
                               <FlowPane prefHeight="200.0" prefWidth="200.0" />
                               <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Label id="addUserLbl" fx:id="addUserLbl" text="Label" />
+                                    <Label id="addUserLbl" fx:id="addUserLbl" text="Label">
+                                        <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </FlowPane>
                               <FlowPane prefHeight="200.0" prefWidth="200.0" />
@@ -334,7 +372,7 @@
                         </VBox>
                      </children>
                   </StackPane>
-                  <StackPane id="categoryPane" fx:id="categoryPane" prefHeight="598.0" prefWidth="520.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <StackPane id="categoryPane" fx:id="categoryPane" prefHeight="598.0" prefWidth="520.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>

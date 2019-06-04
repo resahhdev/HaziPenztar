@@ -44,8 +44,18 @@ public class SqlQueries {
         return sql;
     }
     
-    public String getInsertUserSql() {
+    public String getInsertStartUserSql() {
         String sql = "insert into users( username, password ) values ( 'admin', 'admin' )";
+        return sql;
+    }
+    
+    public String getInsertUserSql( String AUser, String APass ) {
+        String sql = "INSERT INTO users ( username, password ) VALUES ( '" + AUser + "', '" + APass + "' )";
+        return sql;
+    }
+    
+    public String getDeleteUserSql( String AUser ) {
+        String sql = "DELETE FROM users WHERE username = '" + AUser + "'";
         return sql;
     }
     
@@ -74,10 +84,18 @@ public class SqlQueries {
         return walletSql;
     }
     
+    public String getSelectDataSql( String ACategory ) {
+        String selectDataSql = "SELECT date, category, price, comment, direction FROM wallet " +
+                               "INNER JOIN categories ON categoryId = categories.id " +
+                               "INNER JOIN directions ON directionId = directions.id " +
+                               "WHERE categoryId = ( SELECT id FROM categories WHERE category = '" + ACategory + "' )";
+        return selectDataSql;
+    }
+    
     public String getInsertDataSql( String ADate, String ACat, String APrice, String AComm, String ADir ) {
-        String sql = "INSERT INTO wallet (date, categoryId, price, comment, directionId) VALUES " +
+        String insertDataSql = "INSERT INTO wallet (date, categoryId, price, comment, directionId) VALUES " +
                      "( '" + ADate + "', (SELECT id FROM categories WHERE category = '" + ACat + "'), '" + APrice +  "', " +
                      "'" + AComm + "', (SELECT id FROM directions WHERE direction = '" + ADir + "'))";
-        return sql;
+        return insertDataSql;
     }
 }

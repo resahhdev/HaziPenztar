@@ -92,6 +92,43 @@ public class DatabaseController {
         return authentication;
     }
     
+    public boolean insertNewUser( String AUser, String APass ) {
+        
+        String sql = sqlQueries.getInsertUserSql( AUser, APass );
+        conn = null;
+        createStatement = null;
+        
+        try {
+            
+            conn = dbConn.connect();
+            createStatement = conn.createStatement();
+            createStatement.execute(sql );
+            return true;
+            
+        } catch ( SQLException ex ) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean deleteUser( String AUser ) {
+        
+        conn = null;
+        createStatement = null;
+        String sql = sqlQueries.getDeleteUserSql( AUser );
+        try {
+            
+            conn = dbConn.connect();
+            createStatement = conn.createStatement();
+            createStatement.execute( sql );
+            return true;
+            
+        } catch ( SQLException ex ) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
     public void setCategoryList() {
         
         String sql = sqlQueries.getComboItemsSql();
