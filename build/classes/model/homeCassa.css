@@ -1,11 +1,15 @@
 #diagramPane {
-    -fx-background-color: blue;
+    
 }
 
 #loginPane {
     
 }
 
+
+#dbBtn {
+    
+}
 #loginPassTf {
     -fx-background-color: #f4f4f4;
     -fx-text-inner-color: black;
@@ -18,4 +22,8 @@
 
 #selectDataBtn {
     
+}
+
+.chart-bar {
+    -fx-bar-fill: red;
 }

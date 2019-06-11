@@ -8,17 +8,19 @@ package control;
 import control.DatabaseController;
 import model.Wallet;
 import java.net.URL;
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -30,7 +32,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -111,6 +112,7 @@ public class GuiController implements Initializable {
     private ObservableList<String> categoryList;
     private ObservableList<String> directionList;
 //========================== End comboboxes declaration ========================
+    @FXML private BarChart<String, Number> barChart;
     private int mode;
     private Image green = new Image( getClass().getResourceAsStream( "/images/greenlamp.png" ));
     private Image red = new Image( getClass().getResourceAsStream( "/images/redlamp.png" ));
@@ -352,10 +354,51 @@ public class GuiController implements Initializable {
         userPane.setVisible( false );
         aboutPane.setVisible( false );
         helpPane.setVisible( false );
+        setDiagram();
     }
     
     public void setDiagram() {
         
+        final String income = "Bevétel";
+        final String outgoing = "Kiadás";
+        
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        barChart = new BarChart<String, Number>( xAxis, yAxis );
+        barChart.setTitle( "Statisztika (6 hónap)" );
+        xAxis.setLabel( "Hónap" );
+        yAxis.setLabel( "Összeg" );
+        
+        XYChart.Series incomeSeries = new XYChart.Series<>();
+        incomeSeries.setName( income );
+        incomeSeries.getData().add( new XYChart.Data( "Január", 352000 ));
+        incomeSeries.getData().add( new XYChart.Data( "Február", 321000 ));
+        incomeSeries.getData().add( new XYChart.Data( "Március", 359000 ));
+        incomeSeries.getData().add( new XYChart.Data( "Április", 267000 ));
+        incomeSeries.getData().add( new XYChart.Data( "Május", 387000 ));
+        incomeSeries.getData().add( new XYChart.Data( "Június", 255000 ));
+        
+        XYChart.Series outgoingSeries = new XYChart.Series<>();
+        outgoingSeries.setName( outgoing );
+        outgoingSeries.getData().add( new XYChart.Data( "Január", 298000 ));
+        outgoingSeries.getData().add( new XYChart.Data( "Február", 325000 ));
+        outgoingSeries.getData().add( new XYChart.Data( "Március", 215000 ));
+        outgoingSeries.getData().add( new XYChart.Data( "Április", 267000 ));
+        outgoingSeries.getData().add( new XYChart.Data( "Május", 367000 ));
+        outgoingSeries.getData().add( new XYChart.Data( "Június", 199000 ));
+        
+        barChart.getData().addAll( incomeSeries, outgoingSeries );
+        diagramPane.getChildren().add( barChart );
+        /*
+        Node n = barChart.lookup(".data0.chart-bar");
+        n.setStyle("-fx-bar-fill: green");
+        n = barChart.lookup(".data1.chart-bar");
+        n.setStyle("-fx-bar-fill: red");
+        n = barChart.lookup(".data2.chart-bar");
+        n.setStyle("-fx-bar-fill: green");
+        n = barChart.lookup(".data3.chart-bar");
+        n.setStyle("-fx-bar-fill: red");
+        */
     }
     
     private void setLoginPane() {
@@ -437,18 +480,19 @@ public class GuiController implements Initializable {
     }
     
     public void dbBtnAction() {
-        
+        statusLbl.setText( "Kapcsolódás ..." );
         if( mode == 0 ) {
             
             boolean isConnected = false;
             isConnected = dbCtr.connect();
-            if( isConnected == true ) {
+            
+            if( isConnected ) {
                 
                 mode = 1;
                 Image databaseGreen = new Image( getClass().getResourceAsStream( "/images/databasegreen.png" ));
                 dbBtn.setText( "Kapcsolat OK" );
                 dbBtn.setGraphic( new ImageView( databaseGreen ) );
-                statusLbl.setText( "" );
+                statusLbl.setText( "Jelentkezzen be!" );
                 
             }else {
                 
