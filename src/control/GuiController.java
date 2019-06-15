@@ -36,6 +36,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import model.ImageCollection;
 
 /**
  *
@@ -44,6 +45,7 @@ import javafx.scene.paint.Color;
 public class GuiController implements Initializable {
     
     private DatabaseController dbCtr;
+    private ImageCollection imgCol;
     @FXML private DatePicker datePicker;
     
 //===================== Start menu items declaration ===========================
@@ -122,6 +124,7 @@ public class GuiController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         directionList = FXCollections.observableArrayList( "Ki", "Be" );
+        imgCol = new ImageCollection();
         setStatusPane();
         start();
         menuAction();
@@ -151,66 +154,36 @@ public class GuiController implements Initializable {
     private void setStatusPane() {
         
         dbBtn.setText( "Kapcsolódás" );
-        Image databaseRed = new Image( getClass().getResourceAsStream( "/images/databasered.png" ));
-        dbBtn.setGraphic( new ImageView( databaseRed ) );
+        dbBtn.setGraphic( imgCol.getValue( ":__DBRED__" ));
         ballanceLbl.setTextFill(Color.web( "red" ));
     }
     
     public void setMenu() {
         
-        Image xImgHome = new Image( getClass().getResourceAsStream( "/images/home.png" ));
-        Node xHomeIcon = new ImageView( xImgHome );
-        Image xImgLogin = new Image( getClass().getResourceAsStream( "/images/login.png" ));
-        Node xLoginIcon = new ImageView( xImgLogin ); 
-        Image xImgNew = new Image( getClass().getResourceAsStream( "/images/new.png" ));
-        Node xNewIcon = new ImageView( xImgNew );
-        Image xImgData = new Image( getClass().getResourceAsStream( "/images/modify.png" ));
-        Node xDataIcon = new ImageView( xImgData );
-        Image xImgUser = new Image( getClass().getResourceAsStream( "/images/useradd.png" ));
-        Node xUserIcon = new ImageView( xImgUser );
-        Image xImgCategory = new Image( getClass().getResourceAsStream( "/images/category.png" ));
-        Node xCategoryIcon = new ImageView( xImgCategory );
-        Image xImgSelect = new Image( getClass().getResourceAsStream( "/images/select.png" ));
-        Node xSelectIcon = new ImageView( xImgSelect );
-        Image xImgTable = new Image( getClass().getResourceAsStream( "/images/table.png" ));
-        Node xTableIcon = new ImageView( xImgTable );
-        Image xImgDiagram = new Image( getClass().getResourceAsStream( "/images/diagram.png" ));
-        Node xDiagramIcon = new ImageView( xImgDiagram );
-        Image xImgDate = new Image( getClass().getResourceAsStream( "/images/calendar.png" ));
-        Node xDateIcon = new ImageView( xImgDate );
-        Image xImgProgram = new Image( getClass().getResourceAsStream( "/images/java.png" ));
-        Node xProgramIcon = new ImageView( xImgProgram );
-        Image xImgAbout = new Image( getClass().getResourceAsStream( "/images/about.png" ));
-        Node xAboutIcon = new ImageView( xImgAbout );
-        Image xImgHelp = new Image( getClass().getResourceAsStream( "/images/help.png" ));
-        Node xHelpIcon = new ImageView( xImgHelp );
-        Image xImgClose = new Image( getClass().getResourceAsStream( "/images/logout.png" ));
-        Node xCloseIcon = new ImageView( xImgClose );
-        
         TreeItem<String> root = new TreeItem<>( "Menü" );
         treeView = new TreeView<>( root );
         treeView.setShowRoot( false );
         
-        TreeItem<String> mangeMn = new TreeItem<>( MANAGE_MN, xHomeIcon );
-        TreeItem<String> loginMn = new TreeItem<>( LOGIN_MN, xLoginIcon );
-        TreeItem<String> closeMn = new TreeItem<>( CLOSE_MN, xCloseIcon );
+        TreeItem<String> mangeMn = new TreeItem<>( MANAGE_MN, imgCol.getValue( ":__HOME__" ));
+        TreeItem<String> loginMn = new TreeItem<>( LOGIN_MN, imgCol.getValue( ":__LOGIN__" ));
+        TreeItem<String> closeMn = new TreeItem<>( CLOSE_MN, imgCol.getValue( ":__LOGOUT__" ));
         mangeMn.getChildren().addAll( loginMn, closeMn );
         mangeMn.setExpanded( true );
         
-        TreeItem<String> inputMn = new TreeItem<>( INPUT_MN, xNewIcon );
-        TreeItem<String> dataMn = new TreeItem<>( DATA_MN, xDataIcon );
-        TreeItem<String> userMn = new TreeItem<>( USER_MN, xUserIcon );
-        TreeItem<String> categoryMn = new TreeItem<>( CATEGORY_MN, xCategoryIcon );
+        TreeItem<String> inputMn = new TreeItem<>( INPUT_MN, imgCol.getValue( ":__NEW__" ));
+        TreeItem<String> dataMn = new TreeItem<>( DATA_MN, imgCol.getValue( ":__DATA__" ));
+        TreeItem<String> userMn = new TreeItem<>( USER_MN, imgCol.getValue( ":__USER__" ));
+        TreeItem<String> categoryMn = new TreeItem<>( CATEGORY_MN, imgCol.getValue( ":__CATEGORY__" ));
         inputMn.getChildren().addAll( dataMn, userMn, categoryMn );
         
-        TreeItem<String> selectMn = new TreeItem<>( SELECT_MN, xSelectIcon );
-        TreeItem<String> TableMn = new TreeItem<>( TABLE_MN, xTableIcon );
-        TreeItem<String> DiagramMn = new TreeItem<>( DIAGRAM_MN, xDiagramIcon );
+        TreeItem<String> selectMn = new TreeItem<>( SELECT_MN, imgCol.getValue( ":__SELECT__" ));
+        TreeItem<String> TableMn = new TreeItem<>( TABLE_MN, imgCol.getValue( ":__TABLE__" ));
+        TreeItem<String> DiagramMn = new TreeItem<>( DIAGRAM_MN, imgCol.getValue( ":__DIAGRAM__" ));
         selectMn.getChildren().addAll( TableMn, DiagramMn );
         
-        TreeItem<String> programMn = new TreeItem<>( PROGRAM_MN, xProgramIcon );
-        TreeItem<String> aboutMn = new TreeItem<>( ABOUT_MN, xAboutIcon );
-        TreeItem<String> helpMn = new TreeItem<>( HELEP_MN, xHelpIcon );
+        TreeItem<String> programMn = new TreeItem<>( PROGRAM_MN, imgCol.getValue( ":__PROGRAM__" ));
+        TreeItem<String> aboutMn = new TreeItem<>( ABOUT_MN, imgCol.getValue( ":__ABOUT__" ));
+        TreeItem<String> helpMn = new TreeItem<>( HELEP_MN, imgCol.getValue( ":__HELP__" ));
         programMn.getChildren().addAll( aboutMn, helpMn );
         
         root.getChildren().addAll( mangeMn, inputMn, selectMn, programMn );
@@ -489,9 +462,10 @@ public class GuiController implements Initializable {
             if( isConnected ) {
                 
                 mode = 1;
-                Image databaseGreen = new Image( getClass().getResourceAsStream( "/images/databasegreen.png" ));
+                //Image databaseGreen = new Image( getClass().getResourceAsStream( "/images/databasegreen.png" ));
                 dbBtn.setText( "Kapcsolat OK" );
-                dbBtn.setGraphic( new ImageView( databaseGreen ) );
+                dbBtn.setGraphic( imgCol.getValue( ":__DBGREEN__" ));
+                //dbBtn.setGraphic( new ImageView( databaseGreen ) );
                 statusLbl.setText( "Jelentkezzen be!" );
                 
             }else {
