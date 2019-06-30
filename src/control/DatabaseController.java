@@ -36,13 +36,12 @@ public class DatabaseController {
     private ResultSet resultset;
     private PreparedStatement prepStm;
     private Statement createStatement;
-    private ObservableList<String> categoryList;
-    private ObservableList<String> directionList;
+    //private ObservableList<String> categoryList;
+    //private ObservableList<String> directionList;
     
     public DatabaseController( GuiController AGuiCtr ) {
         
-        categoryList = FXCollections.observableArrayList();
-        directionList = FXCollections.observableArrayList();
+        //directionList = FXCollections.observableArrayList();
         guiCtr = AGuiCtr;
         conn = null;
         sqlQueries = new SqlQueries();
@@ -129,9 +128,9 @@ public class DatabaseController {
         }
     }
     
-    public void setCategoryList() {
+    public ObservableList<String> getCategoryList() {
         
-        String sql = sqlQueries.getComboItemsSql();
+        ObservableList<String> xCategoryList = FXCollections.observableArrayList();
         conn = dbConn.connect();
         createStatement = null;
         resultset = null;
@@ -139,25 +138,67 @@ public class DatabaseController {
         try {
             
             createStatement = conn.createStatement();
-            resultset = createStatement.executeQuery( sql );
+            resultset = createStatement.executeQuery( sqlQueries.getComboItemsSql() );
             while( resultset.next() ) {
                 
-                categoryList.add( resultset.getString( "category" ));
+                xCategoryList.add( resultset.getString( "category" ));
             }
             
         }catch( SQLException AEx ) {
             Logger.getLogger( DatabaseController.class.getName()).log(Level.SEVERE, null, AEx );
         }
-    }
-    
-    public void setDirectionList() {
         
+        return xCategoryList;
     }
     
-    public ArrayList<Wallet> setWalletData() {
+    public ObservableList<String> getMonthList() {
+        
+        ObservableList<String> xMonthList = FXCollections.observableArrayList();
+        conn = null;
+        createStatement = null;
+        resultset = null;
+        
+        try {
+            
+            conn = dbConn.connect();
+            createStatement = conn.createStatement();
+            resultset = createStatement.executeQuery( sqlQueries.getMonthComboItemsSql() );
+            
+            while ( resultset.next() ) {                
+                //System.out.println(resultset.getString( "month" )); 
+                xMonthList.add( resultset.getString( "month" ));
+            }
+            
+        } catch ( SQLException e ) {
+            Logger.getLogger( DatabaseController.class.getName()).log(Level.SEVERE, null, e );
+        }
+        
+        return xMonthList;
+    }
+     
+    public void getDiagramSumIn() {
+        
+        conn = null;
+        createStatement = null;
+        resultset = null;
+        try {
+            
+            conn = dbConn.connect();
+            createStatement = conn.createStatement();
+            resultset = createStatement.executeQuery( sqlQueries.getDiagramPriceInSql( "2019-01-01", "2019-06-30"));
+            
+            while( resultset.next() ) {
+                System.out.println( resultset.getString( 1 ));
+            }
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+    }
+    
+    public ArrayList<Wallet> setWalletData( String AUser ) {
         
         Image image = null;
-        String sql = sqlQueries.getWalletDataSql();
+        String sql = sqlQueries.getWalletDataSql( AUser );
         conn = null;
         createStatement = null;
         resultset = null;
@@ -232,14 +273,14 @@ public class DatabaseController {
         return ballance;
     }
     
-    public void insertData( String ADate, String ACategory, String APrice, String AComment, String ADirection ) {
+    public void insertData( String ACategory, String APrice, String AComment, String ADirection ) {
 /*
 "INSERT INTO wallet (date, categoryId, price, comment, directionId) VALUES " +
                    "( ?, (SELECT id FROM categories WHERE category = ?), ?, " +
                    "?, (SELECT id FROM directions WHERE direction = ?))";
 */      
         //String sql = sqlqueries.getInsertDataSql();
-        String sql = sqlQueries.getInsertDataSql( ADate, ACategory, APrice, AComment, ADirection );
+        String sql = sqlQueries.getInsertDataSql( ACategory, APrice, AComment, ADirection );
         try {
             
             conn = dbConn.connect();
@@ -252,7 +293,5 @@ public class DatabaseController {
         
     }
     
-    public ObservableList getCategoryList() { return categoryList; }
-    public ObservableList getDirectionList() { return directionList; }
-    //public ObservableList getWalletData() { return walletData; }
+    //public ObservableList getDirectionList() { return directionList; }
 }

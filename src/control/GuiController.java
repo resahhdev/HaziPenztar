@@ -5,22 +5,17 @@
  */
 package control;
 
-import control.DatabaseController;
 import model.Wallet;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -29,14 +24,23 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import model.ImageCollection;
+import model.ToolTipCollection;
+import myClasses.RDataView;
+import myClasses.RLoginView;
 
 /**
  *
@@ -46,9 +50,15 @@ public class GuiController implements Initializable {
     
     private DatabaseController dbCtr;
     private ImageCollection imgCol;
-    @FXML private DatePicker datePicker;
+    private ToolTipCollection ttCol;
+    private RLoginView FLoginVw;
+    private String FUser;
+    @FXML private DatePicker newDatePicker;
+    @FXML private DatePicker startDatePicker;
+    @FXML private DatePicker endDatePicker;
     
 //===================== Start menu items declaration ===========================
+    @FXML private TreeView<String> treeview;
     @FXML private final String MANAGE_MN = "Kezelés";
     @FXML private final String LOGIN_MN = "Bejelentkezés";
     @FXML private final String CLOSE_MN = "Kilépés";
@@ -71,9 +81,13 @@ public class GuiController implements Initializable {
     @FXML private StackPane tablePane;
     @FXML private StackPane diagramPane;
     @FXML private StackPane loginPane;
+    @FXML private StackPane innerLoginPane;
     @FXML private StackPane dataPane;
     @FXML private StackPane userPane;
+    @FXML private StackPane innerUserPane;
     @FXML private StackPane categoryPane;
+    @FXML private StackPane innerDataPane;
+    @FXML private VBox loginVbox;
 //========================= End panes declaration ==============================
     
 //===================== Start textfields declaration ===========================
@@ -101,16 +115,17 @@ public class GuiController implements Initializable {
 //=========================== Start labels declaration =========================
     @FXML private Label statusLbl;
     @FXML private Label loginStatusLbl;
-    @FXML private Label dataStatusLbl;
+    @FXML private Label FDatabaseLbl;
     @FXML private Label ballanceLbl;
+    @FXML private Label FBallanceTextLbl;
     @FXML private Label addUserLbl;
-    @FXML private Label categoryStatusLbl;
 //============================ End labels declaration ==========================
     
 //========================= Start comboboxes declaration =======================
+    @FXML private ComboBox<String> selectDataCb;
+    @FXML private ComboBox<String> selectDateCb;
     @FXML private ComboBox<String> dataCategoryCb;
     @FXML private ComboBox<String> dataDirectionCb;
-    @FXML private ComboBox<String> selectDataCb;
     private ObservableList<String> categoryList;
     private ObservableList<String> directionList;
 //========================== End comboboxes declaration ========================
@@ -125,9 +140,10 @@ public class GuiController implements Initializable {
         
         directionList = FXCollections.observableArrayList( "Ki", "Be" );
         imgCol = new ImageCollection();
+        ttCol = new ToolTipCollection();
         setStatusPane();
         start();
-        menuAction();
+        //menuAction();
     }
 
     private void start() {
@@ -135,12 +151,8 @@ public class GuiController implements Initializable {
         mode = 0;
         setMenu();
         dbCtr = new DatabaseController( this );
-        loginStatusLbl.setText( "" );
+        
         statusLbl.setText( "" );
-        dataStatusLbl.setText( "" );
-        addUserLbl.setText( "" );
-        loginStatusLbl.setText( "" );
-        categoryStatusLbl.setText( "" );
         loginPane.setVisible( false );
         tablePane.setVisible( false );
         diagramPane.setVisible( false );
@@ -153,16 +165,21 @@ public class GuiController implements Initializable {
     
     private void setStatusPane() {
         
+        DropShadow xDropSdw = new DropShadow();
+        xDropSdw.setOffsetX( 5 );
+        xDropSdw.setOffsetY( 5 );
+        FDatabaseLbl.setTextFill( Color.WHITE );
+        FDatabaseLbl.setEffect( xDropSdw );
+        FBallanceTextLbl.setTextFill( Color.WHITE );
+        FBallanceTextLbl.setEffect( xDropSdw );
         dbBtn.setText( "Kapcsolódás" );
         dbBtn.setGraphic( imgCol.getValue( ":__DBRED__" ));
-        ballanceLbl.setTextFill(Color.web( "red" ));
+        ballanceLbl.setTextFill( Color.PINK );
     }
     
     public void setMenu() {
         
         TreeItem<String> root = new TreeItem<>( "Menü" );
-        treeView = new TreeView<>( root );
-        treeView.setShowRoot( false );
         
         TreeItem<String> mangeMn = new TreeItem<>( MANAGE_MN, imgCol.getValue( ":__HOME__" ));
         TreeItem<String> loginMn = new TreeItem<>( LOGIN_MN, imgCol.getValue( ":__LOGIN__" ));
@@ -187,67 +204,29 @@ public class GuiController implements Initializable {
         programMn.getChildren().addAll( aboutMn, helpMn );
         
         root.getChildren().addAll( mangeMn, inputMn, selectMn, programMn );
-        menuPane.getChildren().add( treeView );
+        treeview.setRoot( root );
     }
     
-    private void menuAction() {
+    @FXML
+    public void mouseClick() {
         
-        treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
-            @Override
-            public void changed( ObservableValue observable, Object oldValue, Object newValue ) {
-                
-                TreeItem<String> selectedItem = ( TreeItem<String> ) newValue;
-                String selectedMenu = selectedItem.getValue();
-                
+        String selectedMenu = treeview.getSelectionModel().getSelectedItem().getValue();
+        
                 if( selectedMenu != null ) {
                     
                     switch( selectedMenu ) {
                         
-                        case LOGIN_MN:
-                            if( mode == 1 ) {
-                               setLoginPane(); 
-                            }
-                            break;
+                        case LOGIN_MN: if( mode == 1 ) { setLoginPane(); } break;
                         case CLOSE_MN: exit(); break;
-                        case DATA_MN:
-                            if( mode == 2 ) {
-                               setDataPane(); 
-                            }
-                            break;
-                        case USER_MN:
-                            if( mode == 2 ) {
-                               setUserPane(); 
-                            }
-                            break;
-                        case CATEGORY_MN:
-                            if( mode == 2 ) {
-                               setCategoryPane(); 
-                            }
-                            break;
-                        case TABLE_MN:
-                            if( mode == 2 ) {
-                               setTablePane(); 
-                            }
-                            break;
-                        case DIAGRAM_MN:
-                            if( mode == 2 ) {
-                               setDiagramPane(); 
-                            }
-                            break;
-                        case ABOUT_MN:
-                            if( mode == 2 ) {
-                               setAboutPane(); 
-                            }
-                            break;
-                        case HELEP_MN:
-                            if( mode == 2 ) {
-                               setHelpPane(); 
-                            }
-                            break;
+                        case DATA_MN: if( mode == 2 ) { setDataPane(); } break;
+                        case USER_MN: if( mode == 2 ) { setUserPane(); } break;
+                        case CATEGORY_MN: if( mode == 2 ) { setCategoryPane(); } break;
+                        case TABLE_MN: if( mode == 2 ) { setTablePane(); } break;
+                        case DIAGRAM_MN: if( mode == 2 ) { setDiagramPane(); } break;
+                        case ABOUT_MN: if( mode == 2 ) { setAboutPane(); } break;
+                        case HELEP_MN: if( mode == 2 ) { setHelpPane(); } break;
                     }
                 }
-            }
-        });
     }
     
     private void setTablePane() {
@@ -269,9 +248,12 @@ public class GuiController implements Initializable {
     
     public void setTable() {
         
-        dbCtr.setCategoryList();
-        categoryList = dbCtr.getCategoryList();
-        selectDataCb.setItems( categoryList );
+        selectDataCb.setItems( dbCtr.getCategoryList() );
+        selectDataCb.setPromptText( "Kategória" );
+        selectDataCb.setTooltip( new Tooltip( ttCol.getToolTip( ":__SELCATEGORY__" )));
+        selectDateCb.setPromptText( "Hónap" );
+        selectDateCb.setItems( dbCtr.getMonthList() );
+        selectDateCb.setTooltip( new Tooltip( ttCol.getToolTip( ":__SELMONTH__" )));
         
         TableColumn xDateCol = new TableColumn( "Dátum" );
         xDateCol.setMinWidth( 25 );
@@ -294,7 +276,7 @@ public class GuiController implements Initializable {
         xImageCol.setCellValueFactory( new PropertyValueFactory<>( "image" ));
         
         table.getColumns().addAll( xDateCol, xCategoryCol, xPriceCol, xCommentCol, xImageCol );
-        xData.addAll( dbCtr.setWalletData() );
+        xData.addAll( dbCtr.setWalletData( FUser ) );
         table.setItems( xData );
         setBallaceLbl();
     }
@@ -331,7 +313,8 @@ public class GuiController implements Initializable {
     }
     
     public void setDiagram() {
-        
+        /*
+        dbCtr.getDiagramSumIn();
         final String income = "Bevétel";
         final String outgoing = "Kiadás";
         
@@ -341,6 +324,21 @@ public class GuiController implements Initializable {
         barChart.setTitle( "Statisztika (6 hónap)" );
         xAxis.setLabel( "Hónap" );
         yAxis.setLabel( "Összeg" );
+        
+        ObservableList<XYChart.Series<String, Double>> answer = FXCollections.observableArrayList();
+        Series<String, Double> aSeries = new Series<String, Double>();
+        Series<String, Double> cSeries = new Series<String, Double>();
+        aSeries.setName("a");
+        cSeries.setName("C");
+        
+        for (int i = 2011; i < 2021; i++) {
+            aSeries.getData().add(new XYChart.Data(Integer.toString(i), aValue));
+            aValue = aValue + Math.random() - .5;
+            cSeries.getData().add(new XYChart.Data(Integer.toString(i), cValue));
+            cValue = cValue + Math.random() - .5;
+        }
+        answer.addAll(aSeries, cSeries);
+        
         
         XYChart.Series incomeSeries = new XYChart.Series<>();
         incomeSeries.setName( income );
@@ -362,7 +360,7 @@ public class GuiController implements Initializable {
         
         barChart.getData().addAll( incomeSeries, outgoingSeries );
         diagramPane.getChildren().add( barChart );
-        /*
+        
         Node n = barChart.lookup(".data0.chart-bar");
         n.setStyle("-fx-bar-fill: green");
         n = barChart.lookup(".data1.chart-bar");
@@ -371,11 +369,20 @@ public class GuiController implements Initializable {
         n.setStyle("-fx-bar-fill: green");
         n = barChart.lookup(".data3.chart-bar");
         n.setStyle("-fx-bar-fill: red");
+        n = barChart.lookup(".data4.chart-bar");
+        n.setStyle("-fx-bar-fill: green");
+        n = barChart.lookup(".data4.chart-bar");
+        n.setStyle("-fx-bar-fill: red");
+        n = barChart.lookup(".data5.chart-bar");
+        n.setStyle("-fx-bar-fill: green");
+        n = barChart.lookup(".data6.chart-bar");
+        n.setStyle("-fx-bar-fill: red");
         */
     }
     
     private void setLoginPane() {
         
+        FLoginVw = new RLoginView( "Bejelentkezés", 1 );
         loginPane.setVisible( true );
         tablePane.setVisible( false );
         diagramPane.setVisible( false );
@@ -384,7 +391,11 @@ public class GuiController implements Initializable {
         userPane.setVisible( false );
         aboutPane.setVisible( false );
         helpPane.setVisible( false );
-    }
+        
+        innerLoginPane.getChildren().add( FLoginVw );
+        FLoginVw.setMessageLbl( "Jelentkezzen be!" );
+        login();
+     }
     
     private void setAboutPane() {
         
@@ -412,6 +423,7 @@ public class GuiController implements Initializable {
     
     private void setUserPane() {
         
+        FLoginVw = new RLoginView( "Új felhasználó", 2 );
         loginPane.setVisible( false );
         tablePane.setVisible( false );
         diagramPane.setVisible( false );
@@ -420,6 +432,9 @@ public class GuiController implements Initializable {
         userPane.setVisible( true );
         aboutPane.setVisible( false );
         helpPane.setVisible( false );
+        
+        innerUserPane.getChildren().add( FLoginVw );
+        addUser();
     }
     
     private void setCategoryPane() {
@@ -445,28 +460,38 @@ public class GuiController implements Initializable {
         aboutPane.setVisible( false );
         helpPane.setVisible( false );
         
-        dbCtr.setCategoryList();
+        
         categoryList = dbCtr.getCategoryList();
-        dataCategoryCb.setItems( categoryList );
+        
+        RDataView xDataVw = new RDataView( "Új adat", categoryList, directionList );
+        innerDataPane.getChildren().add( xDataVw );
+        System.out.println("példányosítás");
+        inputData( xDataVw );
+        
+        /*
+        dataCategoryCb.setItems( dbCtr.getCategoryList() );
         dataDirectionCb.setItems( directionList );
-        datePicker.setValue( LocalDate.now() );
+        newDatePicker.setValue( LocalDate.now() );
+        */
     }
     
     public void dbBtnAction() {
-        statusLbl.setText( "Kapcsolódás ..." );
+        
         if( mode == 0 ) {
             
+            statusLbl.setText( "Kapcsolódás ..." );
             boolean isConnected = false;
             isConnected = dbCtr.connect();
             
             if( isConnected ) {
                 
-                mode = 1;
-                //Image databaseGreen = new Image( getClass().getResourceAsStream( "/images/databasegreen.png" ));
                 dbBtn.setText( "Kapcsolat OK" );
+                dbBtn.setStyle("-fx-text-fill: black");
+                dbBtn.setStyle("-fx-background-color: lightgreen");
+                //setLoginPane();
                 dbBtn.setGraphic( imgCol.getValue( ":__DBGREEN__" ));
-                //dbBtn.setGraphic( new ImageView( databaseGreen ) );
                 statusLbl.setText( "Jelentkezzen be!" );
+                mode = 1;
                 
             }else {
                 
@@ -476,45 +501,139 @@ public class GuiController implements Initializable {
         }
     }
     
-    public void loginBtnAction() {
+    public void login() { 
         
+        FLoginVw.getLoginBtn().setOnAction( new EventHandler() {
+            @Override
+            public void handle(Event t) {
+                
+                String[] xLoginData = FLoginVw.getLoginData();
+                 if( mode == 1 ) {
+            
+                    if( !xLoginData[ 0 ].equals( "" )) {
+
+                        String authentication = dbCtr.getLoginUser( xLoginData[ 0 ] );
+                        String[] auth = authentication.split( ":" );
+
+                        if( auth[ 0 ].equals( xLoginData[ 0 ] ) && auth[ 1 ].equals( xLoginData[ 1 ] )) {
+
+                            FUser = auth[ 0 ];
+                            statusLbl.setText( "Üdv " + auth[ 0]  );
+                            FLoginVw.getUserTf().setText( "" );
+                            FLoginVw.getPassTf().setText( "" );
+                            FLoginVw.setMessageLbl( "" );
+                            mode = 2;
+
+                        }else {
+
+                            FLoginVw.setErrorMessage( "Hibás adatok!" );
+                        }
+
+                    }else {
+
+                        FLoginVw.setErrorMessage( "Mező nem lehet üres!" );
+
+                    }  
+                }else {
+
+                    //loginStatusLbl.setTextFill( Color.web( "red" ));
+                    //loginStatusLbl.setText( "Kapcsolódjon az adatbázishoz!" );
+                }
+            }
+    });
+        
+        
+        FLoginVw.getCancelBtn().setOnAction( new EventHandler() {
+            @Override
+            public void handle(Event t) {
+                FLoginVw.getUserTf().setText( "" );
+                FLoginVw.getPassTf().setText( "" );
+            }
+        
+        });
+        /*
         if( mode == 1 ) {
             
-            if( !loginUserNameTf.getText().equals( "" )) {
+            if( !AUser.equals( "" )) {
             
-                String authentication = dbCtr.getLoginUser( loginUserNameTf.getText() );
+                String authentication = dbCtr.getLoginUser( AUser );
                 String[] auth = authentication.split( ":" );
 
-                if( auth[ 0 ].equals( loginUserNameTf.getText() ) && auth[ 1 ].equals( loginPassTf.getText() )) {
+                if( auth[ 0 ].equals( AUser ) && auth[ 1 ].equals( APass )) {
 
-                    loginStatusLbl.setTextFill( Color.web( "green" ));
                     statusLbl.setText( "Üdv " + auth[ 0]  );
                     mode = 2;
 
                 }else {
-
-                    loginStatusLbl.setTextFill( Color.web( "red" ));
-                    loginStatusLbl.setText( "Hibás adatok!" );
+                    
+                    FLoginVw.setErrorMessage( "Hibás adatok!" );
                 }
+                
             }else {
                 
-                loginStatusLbl.setTextFill( Color.web( "red" ));
-                loginStatusLbl.setText( "Mezők nem lehetnek üresen!" );
+                FLoginVw.setErrorMessage( "Mezők nem lehetnek üresen!" );
+                
             }  
         }else {
             
             loginStatusLbl.setTextFill( Color.web( "red" ));
             loginStatusLbl.setText( "Kapcsolódjon az adatbázishoz!" );
         }
+        */
     }
     
     private void exit() {
-        System.exit( 0 );
-    }
-    
-    public void inputDataBtnAction() {
         
-        String date = String.valueOf( datePicker.getValue() );
+        if( mode == 2 ) {
+            mode = 1;
+            setLoginPane();
+            statusLbl.setText( "" );
+            ballanceLbl.setTextFill( Color.PINK );
+            ballanceLbl.setText( "000000" );
+            table.getItems().removeAll( xData );
+        }
+    }
+    public void inputData( RDataView ADataVw) {
+        
+        RDataView xDataVw = ADataVw;
+        
+        System.out.println( "getdata" );
+        
+        xDataVw.getOkBtn().setOnAction( new EventHandler() {
+            @Override
+            public void handle(Event t) {
+                System.out.println( "okgomb");
+                
+                String[] data = xDataVw.getData();
+                if(!( data[ 0 ] == null || data[ 1 ].equals( "" ) ||
+                    data[ 2 ].equals( "" ) || data[ 3 ] == null )) {
+                    
+                    xDataVw.setMessageLbl( "" );
+                    dbCtr.insertData( data[ 0 ], data[ 1 ], data[ 2 ], data[ 3 ] );
+                    ImageView imageView;
+                    if( data[ 3 ].equals( "Ki" )) {
+
+                        imageView = new ImageView( red );
+
+                    }else {
+
+                        imageView = new ImageView( green );
+                    }
+                    Wallet wallet = new Wallet( "2000-01-01", data[ 0 ], data[ 1 ], data[ 2 ], imageView );
+                    table.getItems().add(wallet);
+                    setBallaceLbl();
+                    xDataVw.getMessageLbl().setTextFill( Color.LIGHTGREEN );
+                    xDataVw.setMessageLbl( "Sikeres felírás" );
+                    
+                }else {
+                    
+                    xDataVw.setMessageLbl( "Üres mező" );
+                    xDataVw.getMessageLbl().setTextFill( Color.RED );
+                }
+        }
+        });
+        /*
+        String date = String.valueOf( newDatePicker.getValue() );
         String category = dataCategoryCb.getSelectionModel().getSelectedItem();
         String price = valueTf.getText();
         String comment = noteTf.getText();
@@ -523,7 +642,7 @@ public class GuiController implements Initializable {
         
         valueTf.setText( "" );
         noteTf.setText( "" );
-        datePicker.getEditor().clear();
+        newDatePicker.getEditor().clear();
         dataCategoryCb.getSelectionModel().clearSelection();
         dataDirectionCb.getSelectionModel().clearSelection();
         dataStatusLbl.setText( "Sikeres felírás" );
@@ -539,13 +658,70 @@ public class GuiController implements Initializable {
         Wallet wallet = new Wallet( date, category, price, comment, imageView );
         table.getItems().add(wallet);
         setBallaceLbl();
+        */
     }
     
-    public void addUserBtnAction() {
+    public void addUser() {
         
-        String xUserName = addUserTf.getText();
-        String xPassword = addPassTf.getText();
-        boolean addUser = dbCtr.insertNewUser( xUserName, xPassword );
+        FLoginVw.getLoginBtn().setOnAction( new EventHandler() {
+            @Override
+            public void handle(Event t) {
+                
+               String[] xUserData = FLoginVw.getLoginData();
+               if(!( xUserData[ 0 ].equals( "" ) || xUserData[ 1 ].equals( "" ))){
+                   
+                   boolean addUser = dbCtr.insertNewUser( xUserData[ 0 ], xUserData[ 1 ] );
+                   if( addUser ) {
+                       
+                       FLoginVw.getMessageLbl().setTextFill( Color.GREEN );
+                       FLoginVw.setMessageLbl( "Felhasználó hozzáadva" );
+                       
+                   }else {
+                       
+                       FLoginVw.getMessageLbl().setTextFill( Color.RED );
+                       FLoginVw.setMessageLbl( "Írási hiba!" );
+                   }
+               }else {
+                   
+                   FLoginVw.getMessageLbl().setTextFill( Color.RED );
+                   FLoginVw.setMessageLbl( "Mező nem lehet üres!" );
+               }
+            }
+        });
+        
+        FLoginVw.getCancelBtn().setOnAction( new EventHandler() {
+            @Override
+            public void handle(Event t) {
+                
+                FLoginVw.getUserTf().setText( "" );
+                FLoginVw.getPassTf().setText( "" );
+            }
+            
+        });
+        
+        FLoginVw.getDeleteBtn().setOnAction( new EventHandler() {
+            @Override
+            public void handle(Event t) {
+                
+                String userDel = FLoginVw.getUserTf().getText();
+                if( !userDel.equals( "" )) {
+                    
+                    boolean delete = dbCtr.deleteUser( userDel );
+                    if( delete ) {
+                        
+                        FLoginVw.getMessageLbl().setTextFill( Color.GREEN );
+                        FLoginVw.setMessageLbl( "Felhasználó törölve" );
+                    }
+                }else {
+                    
+                    FLoginVw.getMessageLbl().setTextFill( Color.RED );
+                    FLoginVw.setMessageLbl( "Felhasználó mező üres!" );
+                }
+            }
+            
+        });
+        /*
+        boolean addUser = dbCtr.insertNewUser( "", "" );
         if( addUser ) {
            
             addUserLbl.setTextFill( Color.web( "green" ));
@@ -556,7 +732,7 @@ public class GuiController implements Initializable {
             addUserLbl.setTextFill( Color.web( "red" ));
             addUserLbl.setText( "Írási hiba" );
         }
-        
+        */
     }
     
     public void delUserBtnAction() {

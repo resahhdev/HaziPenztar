@@ -43,24 +43,23 @@ public class DbConnect {
                 ResultSet resultset = null;
                 DatabaseMetaData dbMeta = null;
                 
+                
+                DbTeszData dbTest = new DbTeszData();
+                
                 dbMeta = conn.getMetaData();
                 resultset = dbMeta.getTables( null, "APP", "WALLET", null );
                 if( !resultset.next() ) {
                     
-                    String walletSql = sqlQeries.getCreateWalletSql();
-                    creatStatement.execute( walletSql );
-                    String categorySql = sqlQeries.getCreateCategoriesSql();
-                    creatStatement.execute( categorySql );
-                    String directionSql = sqlQeries.getCreateDirectionSql();
-                    creatStatement.execute( directionSql );
-                    String userSql = sqlQeries.getCreateUsersSql();
-                    creatStatement.execute( userSql );
-                    String insertDirectionSql = sqlQeries.getInsertDirectionSql();
-                    creatStatement.execute( insertDirectionSql );
-                    String insertUserSql = sqlQeries.getInsertStartUserSql();
-                    creatStatement.execute( insertUserSql );
-                    String insertCategoriesSql = sqlQeries.getInsertCategoriesSql();
-                    creatStatement.execute( insertCategoriesSql );
+                    creatStatement.execute( sqlQeries.getCreateWalletSql() );
+                    creatStatement.execute( sqlQeries.getCreateCategoriesSql() );
+                    creatStatement.execute( sqlQeries.getCreateDirectionSql() );
+                    creatStatement.execute( sqlQeries.getCreateUsersSql() );
+                    creatStatement.execute( sqlQeries.getInsertDirectionSql() );
+                    creatStatement.execute( sqlQeries.getInsertStartUserSql() );
+                    creatStatement.execute( sqlQeries.getInsertCategoriesSql() );
+                    creatStatement.execute( sqlQeries.getCreateMonthSql() );
+                    creatStatement.execute( sqlQeries.getInsertMonthSql() );
+                    creatStatement.execute( dbTest.fillTestData() );
                     creatStatement.close();
                 }
                 

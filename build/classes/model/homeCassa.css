@@ -1,30 +1,97 @@
-#diagramPane {
-    
-}
 
-#loginPane {
-    
-}
-
-
-#dbBtn {
-    
-}
-#loginPassTf {
-    -fx-background-color: #f4f4f4;
-    -fx-text-inner-color: black;
-}
-
-#loginUserNameTf {
-    -fx-background-color: #f4f4f4;
-    -fx-text-inner-color: black;
-}
-
-#selectDataBtn {
-    
+.pane{
+   -fx-background-color: grey;
 }
 /*
-.chart-bar {
-    -fx-bar-fill: red;
+#loginPane {
+    -fx-background-color: linear-gradient( gray, dimgray );
+}
+*/
+#borderpane {
+    /*-fx-background-color: linear-gradient( gray, dimgray );*/
+}
+
+#gridpane {
+    -fx-background-color: linear-gradient( lightgray, gray );
+    -fx-border-color: white;
+    -fx-border-radius: 20;
+    -fx-padding: 10 10 10 10;
+    -fx-background-radius: 20;
+}
+
+.tree-view {
+    -fx-background-color: gray;
+}
+
+.tree-view:focused .tree-cell:filled:selected {
+    -fx-background-color: pink;
+}
+.tree-cell {
+    -fx-background-color: gray;
+    -fx-text-fill: white;
+}
+.tree-cell:hover {
+    -fx-background-color: linear-gradient( orange, orangered );
+    -fx-text-fill: black;
+    -fx-background-radius: 50px;
+}
+.tree-view:focused .tree-cell:filled:selected {
+    -fx-background-color: linear-gradient( lightsalmon, salmon );
+    -fx-text-fill: white;
+    -fx-background-radius: 50px;
+}
+
+.button {
+    -fx-background-radius: 30, 30, 29, 28;
+    -fx-padding: 3px 10px 3px 10px;
+    -fx-background-color: linear-gradient( orange, orangered );
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient( orangered, orange );
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+    -fx-border-color: white;
+    -fx-border-radius: 50px;
+    
+}
+
+#deletebtn {
+    -fx-background-color: linear-gradient( pink, red );
+}
+#deletebtn:hover {
+    -fx-background-color: linear-gradient( red, pink );
+}
+
+#textfield {
+    -fx-background-radius: 50px;
+}
+/*
+#cancelbtn {
+    -fx-background-radius: 30, 30, 29, 28;
+    -fx-padding: 3px 10px 3px 10px;
+    -fx-background-color: linear-gradient( orange, orangered );
+}
+
+#cancelbtn:hover {
+    -fx-background-color: linear-gradient( red, pink );
+}
+*/
+#text {
+    -fx-fill: linear-gradient( orange, orangered );
+}
+/*
+#dbBtn {
+    -fx-background-color: linear-gradient( orange, orangered );
+    -fx-background-radius: 50px;
+}
+
+#dbBtn:hover {
+    -fx-background-color: linear-gradient( red, pink );
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+    -fx-border-color: white;
+    -fx-border-radius: 50px;
 }
 */

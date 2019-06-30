@@ -1,0 +1,28 @@
+
+#borderpane {
+    -fx-background-color: linear-gradient( gray, dimgray );
+}
+
+#gridpane {
+    -fx-background-color: linear-gradient( lightgray, gray );
+    -fx-border-color: white;
+    -fx-border-radius: 20;
+    -fx-padding: 10 10 10 10;
+    -fx-background-radius: 20;
+}
+
+#loginbtn {
+    -fx-background-radius: 30, 30, 29, 28;
+    -fx-padding: 3px 10px 3px 10px;
+    -fx-background-color: linear-gradient( orange, orangered );
+}
+
+#cancelbtn {
+    -fx-background-radius: 30, 30, 29, 28;
+    -fx-padding: 3px 10px 3px 10px;
+    -fx-background-color: linear-gradient( orange, orangered );
+}
+
+#text {
+    -fx-fill: linear-gradient( orange, orangered );
+}
